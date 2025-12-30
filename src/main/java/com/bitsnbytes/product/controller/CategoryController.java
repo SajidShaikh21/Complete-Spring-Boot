@@ -2,6 +2,7 @@ package com.bitsnbytes.product.controller;
 
 import com.bitsnbytes.product.dto.CategoryDTO;
 import com.bitsnbytes.product.dto.ProductDTO;
+import com.bitsnbytes.product.exception.CategoryAlreadyException;
 import com.bitsnbytes.product.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,12 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO)
+    public ResponseEntity<?> createCategory(@RequestBody CategoryDTO categoryDTO)
     {
-      return  new ResponseEntity<>(categoryService.createCategory(categoryDTO), HttpStatus.CREATED);
+
+            CategoryDTO savedCategory = categoryService.createCategory(categoryDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
+      // return  new ResponseEntity<>(categoryService.createCategory(categoryDTO), HttpStatus.CREATED);
     }
 
     @GetMapping
